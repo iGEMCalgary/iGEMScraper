@@ -5,6 +5,13 @@
 
 import scrapy
 
+class WikiPage(scrapy.Item):
+    url = scrapy.Field()
+    pagetype = scrapy.Field()
+    teamname = scrapy.Field()
+    year = scrapy.Field()
+    pagetext = scrapy.Field()
+
 
 class NetscrapeNavItem(scrapy.Item):
     # define the fields for your item here like:

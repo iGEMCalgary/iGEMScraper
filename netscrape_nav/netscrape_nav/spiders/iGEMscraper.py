@@ -220,7 +220,7 @@ class iGEMSpider(CrawlSpider):
                 pagetext (str): the body content of the wiki page (see getPagetext)
         '''
         page = WikiPage()   # Use scrapy item objects to more accurately follow established standards 
-                            # For more info, see the items.py file or the scrapy documentation
+                            # For more info, see the items.py file or review the scrapy documentation
         
         page['url'] = str(response.url)
         page['pagetype'] = 'Software'
