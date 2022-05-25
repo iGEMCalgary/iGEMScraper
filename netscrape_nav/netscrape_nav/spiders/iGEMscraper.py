@@ -83,7 +83,7 @@ def cleanHTML(page_html):
 
     clean_page = cleaner.clean_html(page)   # Cleans the page according to the parameters above
 
-    tags_to_remove = ['nav', 'footer', 'header', 'h1', 'h2', 'h3', 'ul', 'li']
+    tags_to_remove = ['nav', 'footer', 'header', 'h1', 'h2', 'h3', 'ul', 'li', 'table']
     for tag in tags_to_remove:  # Adapted from https://stackoverflow.com/a/63386884
         for node in clean_page.xpath(f'.//{tag}'):
             node.getparent().remove(node)
