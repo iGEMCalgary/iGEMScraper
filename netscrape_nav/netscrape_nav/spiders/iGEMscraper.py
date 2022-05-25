@@ -29,6 +29,7 @@ import re
 from lxml import html
 from lxml.html.clean import Cleaner
 from parsel import Selector
+from netscrape_nav.items import WikiPage
 
 
 def getTeamname(url):
@@ -181,7 +182,7 @@ class iGEMSpider(CrawlSpider):
             response (Response): the response given by the Scrapy request
 
         Yields:
-            dictionary -> file (see initial documentation):
+            WikiPage Object -> file (see initial documentation):
                 url (str): the url of the software/modelling page
                 pagetype (str): a string identifying if the page is a software or modelling page
                                 in order to help filter them down the line
@@ -189,20 +190,18 @@ class iGEMSpider(CrawlSpider):
                 year (str): identifies the year of competition of the team (see getYear)
                 pagetext (str): the body content of the wiki page (see getPagetext)
         '''
+        page = WikiPage()   # Use scrapy item objects to more accurately follow established standards 
+                            # For more info, see the items.py file or the scrapy documentation
         
-        url = str(response.url)
-        teamname = getTeamname(url)
-        year = getYear(url)
+        page['url'] = str(response.url)
+        page['pagetype'] = 'Model'
+        page['teamname'] = getTeamname(page['url'])
+        page['year'] = getYear(page['url'])
         clean_html = cleanHTML(str(response.text))
-        pagetext = getPagetext(clean_html)
+        page['pagetext'] = getPagetext(clean_html)
 
-        yield {
-            'url' : url,
-            'pagetype' : 'model',
-            'teamname' : teamname,
-            'year' : year,
-            'pagetext' : pagetext,
-        }
+        yield page
+        
     def parse_soft_page(self, response):
         '''
         Function called when a page matches rule 2 of the CrawlSpider rules
@@ -212,7 +211,7 @@ class iGEMSpider(CrawlSpider):
             response (Response): the response given by the Scrapy request
 
         Yields:
-            dictionary -> file (see initial documentation):
+            WikiPage Object -> file (see initial documentation):
                 url (str): the url of the software/modelling page
                 pagetype (str): a string identifying if the page is a software or modelling page
                                 in order to help filter them down the line
@@ -220,19 +219,16 @@ class iGEMSpider(CrawlSpider):
                 year (str): identifies the year of competition of the team (see getYear)
                 pagetext (str): the body content of the wiki page (see getPagetext)
         '''
+        page = WikiPage()   # Use scrapy item objects to more accurately follow established standards 
+                            # For more info, see the items.py file or the scrapy documentation
         
-        url = str(response.url)
-        teamname = getTeamname(url)                 # Calls the getTeamname function
-        year = getYear(url)
+        page['url'] = str(response.url)
+        page['pagetype'] = 'Software'
+        page['teamname'] = getTeamname(page['url'])
+        page['year'] = getYear(page['url'])
         clean_html = cleanHTML(str(response.text))
-        pagetext = getPagetext(clean_html)
+        page['pagetext'] = getPagetext(clean_html)
 
-        yield {
-            'url' : url,
-            'pagetype' : 'software',
-            'teamname' : teamname,
-            'year' : year,
-            'pagetext' : pagetext,
-        }
+        yield page
 
 
