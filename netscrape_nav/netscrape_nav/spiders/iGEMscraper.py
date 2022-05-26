@@ -219,7 +219,7 @@ class iGEMSpider(CrawlSpider):
                 year (str): identifies the year of competition of the team (see getYear)
                 pagetext (str): the body content of the wiki page (see getPagetext)
         '''
-        page = WikiPage()   # Use scrapy item objects to more accurately follow established standards 
+        page = WikiPage()   # Use scrapy item objects to more accurately follow existing convention 
                             # For more info, see the items.py file or review the scrapy documentation
         
         page['url'] = str(response.url)
