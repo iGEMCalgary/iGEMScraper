@@ -5,6 +5,16 @@
 
 
 # useful for handling different item types with a single interface
+'''
+SAMARA iGEM Research Assistant
+pipelines.py
+
+This file creates and defines a item pipeline to process and export the WikiPage scrapy items 
+established in items.py
+
+Doesn't run on it's own; is accessed from iGEMScraper.py when running the command
+'''
+
 from itemadapter import ItemAdapter
 from scrapy.exceptions import DropItem
 from scrapy.exporters import JsonLinesItemExporter
@@ -31,7 +41,7 @@ class KeystoneXL:
     
     def process_item(self, item, spider):   # Runs when an item is yielded in iGEMScraper.py
         
-        scraped_data = ItemAdapter(item)    # Adapts the item into a dict-like ItemAdapter object
+        scraped_data = ItemAdapter(item)    # Adapts the item into a dict-like ItemAdapter object to process
 
         strings_to_check_for = ['No Page Text', # A list of strings found in false-positive, empty pages
                             'The requested page title was invalid', 
