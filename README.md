@@ -28,12 +28,24 @@ The program is run through the terminal. In order to do so, we must first naviga
   
 We can then run the scraper itself using the following command:  
   
-`scrapy crawl tomholland -O samara.csv --logfile scraper.log`  
+`scrapy crawl tomholland --logfile scraper.log`  
 
-This command can be modified to suit your needs and documentation to do so is available on the [Scrapy docs](https://docs.scrapy.org/en/latest/index.html). By default, the program is set to overwrite the samara.csv file. Supported filetypes and storage options can also be found in the Scrapy documentation. CSV files, while smaller in size than the alternatives, do come with some issues. Namely, the presence of commas in the extracted text annoys CSV editing software. However, slight post-processing should be sufficient to overcome these obstacles.
+This command can be somewhat modified to suit your needs and documentation to do so is available on the [Scrapy docs](https://docs.scrapy.org/en/latest/index.html). By default, the project will output to a file named samara.jl, located in the first netscrape_nav folder.
 
 ## Modification
+
+### Page Selection
   
-As a default, the program scrapes any page that contains Software or Mode* in the URL. To change the pages scraped, you must first create a Link Extractor rule to parse the URL for certain keywords. Certain pages are standardized amongst iGEM teams and thus, are simpler to create rules for. Regular Expressions may be used to create wildcard rules to help increase the scope of the scraper for more inconsistant page namings(see rule #2 and the [RegularExpressions documentation](https://docs.python.org/3/library/re.html) for more information and examples of their usage). 
+As a default, the program scrapes any page that contains Software or Mode* in the URL. To change the pages scraped, you must first create a Link Extractor rule (in iGEMScraper.py) to parse the URL for certain keywords. Certain pages are standardized amongst iGEM teams and thus, are simpler to create rules for. Regular Expressions may be used to create wildcard rules to help increase the scope of the scraper for more inconsistant page namings (see rule #2 and the [RegularExpressions documentation](https://docs.python.org/3/library/re.html) for more information and examples of their usage). 
 
+### Item Processing
+  
+Item processing begins in the items.py file, with the defining of a WikiPage Item object. An Item object is a dictionary-like object that allows for information to remain organized and catagorized. The existing WikiPage Item *should* be sufficent for scraping iGEM wiki pages, but if necessary, it can be easily modified to accept different parameters.
 
+The second step involves post processing in the pipelines.py file. While some preliminary processing is done before creating a WikiPage Item (in iGEMScraper.py), we further process it here to remove unwanted characteristics from the scraped text. This step is easily expanded on, with additional processing steps being a few lines of code away.
+  
+This step also includes the removal of default or unpopulated wiki pages, pages that do not follow standard iGEM convention, and other broken or otherwise unusable pages. 
+
+### Exporting
+  
+Exporting is also done through the pipelines.py file. By default, the scraper will use the JsonLinesItemExporter provided by Scrapy. This will export the pages as a .jl file. If changing the export format is desired or if the existing functionality is simply not enough, one may use the Scrapy [Item Exporters](https://docs.scrapy.org/en/latest/topics/exporters.html) and the [Item Pipeline](https://docs.scrapy.org/en/latest/topics/item-pipeline.html) docs to customize the functionality of the exporter.
