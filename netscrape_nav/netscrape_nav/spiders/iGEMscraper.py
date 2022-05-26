@@ -8,10 +8,7 @@ the terminal directory points to the project directory:
 
 cd ./netscrape_nav
 
-scrapy crawl tomholland -O samara.csv --logfile scraper.log
-
-The second command can be changed into a variety of file formats, depending on your needs.
-See https://docs.scrapy.org/en/latest/topics/feed-exports.html for more information.
+scrapy crawl tomholland --logfile scraper.log
 
 Created by Ahmed Almousawi for the 2022 iGEM Calgary Team
 For inquiries or questions, email igemcalgary@ucalgary.ca or ahmed.almousawi1@ucalgary.ca
@@ -134,7 +131,7 @@ class iGEMSpider(CrawlSpider):
         start_urls [list of str]: the starting url for the scraper to begin
 
     Yields:
-        dictionary -> file (see initial documentation):
+        WikiPage Item -> file (see initial documentation, items.py, pipelines.py):
             url (str): the url of the software/modelling page
             pagetype (str): a string identifying if the page is a software or modelling page
                             in order to help filter them down the line
@@ -157,12 +154,9 @@ class iGEMSpider(CrawlSpider):
         # We've also excluded pages that we don't want to scrape (to decrease scaping times). If modifying, ensure that the pages you want aren't included in this list.
         # Theoretically, there is no issue with keeping it if you've created a rule to get the pages above because the rules are checked top-down, but I wouldn't personally risk it.
         Rule(LinkExtractor(allow=('Team:', ), deny=('oldid=', 'Login', 'action=history', 'wiki', 'Special', 'Journal', 'Notebook', r'Protocol\w+', 'Safety', 'Results', 'Parts', 'Description', 'Judging', r'Sustainab\w+', 'Sponsers', 'Partnership', 'Education'))),
-        
-
     )
 
-    custom_settings = {
-        
+    custom_settings = { 
         # This is 30 to allow much faster scraping. It was 100 once, but the iGEM servers didn't like that 
         # and nearly banned me so the theoretical maximum limit is somewhere in between.
         'CONCURRENT_REQUESTS_PER_DOMAIN' : 30,
@@ -182,7 +176,7 @@ class iGEMSpider(CrawlSpider):
             response (Response): the response given by the Scrapy request
 
         Yields:
-            WikiPage Object -> file (see initial documentation):
+            WikiPage Item -> file (see initial documentation, items.py, pipelines.py):
                 url (str): the url of the software/modelling page
                 pagetype (str): a string identifying if the page is a software or modelling page
                                 in order to help filter them down the line
@@ -201,7 +195,6 @@ class iGEMSpider(CrawlSpider):
         page['pagetext'] = getPagetext(clean_html)
 
         yield page
-        
     def parse_soft_page(self, response):
         '''
         Function called when a page matches rule 2 of the CrawlSpider rules
@@ -211,15 +204,15 @@ class iGEMSpider(CrawlSpider):
             response (Response): the response given by the Scrapy request
 
         Yields:
-            WikiPage Object -> file (see initial documentation):
-                url (str): the url of the software/modelling page
-                pagetype (str): a string identifying if the page is a software or modelling page
-                                in order to help filter them down the line
-                teamname (str): identifies the team that created the page (see getTeamname)
-                year (str): identifies the year of competition of the team (see getYear)
-                pagetext (str): the body content of the wiki page (see getPagetext)
+            WikiPage Item -> file (see initial documentation, items.py, pipelines.py):
+                    url (str): the url of the software/modelling page
+                    pagetype (str): a string identifying if the page is a software or modelling page
+                                    in order to help filter them down the line
+                    teamname (str): identifies the team that created the page (see getTeamname)
+                    year (str): identifies the year of competition of the team (see getYear)
+                    pagetext (str): the body content of the wiki page (see getPagetext)
         '''
-        page = WikiPage()   # Use scrapy item objects to more accurately follow established standards 
+        page = WikiPage()   # Use scrapy item objects to more accurately follow existing convention 
                             # For more info, see the items.py file or review the scrapy documentation
         
         page['url'] = str(response.url)
