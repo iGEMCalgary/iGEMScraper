@@ -5,7 +5,7 @@ A web scraper created using python and scrapy in order to automatically visit, p
 was designed as the first component of the larger SAMARA Research Assistant project. However, in order to keep it accessible to other teams, it
 has also been released as a standalone module, allowing other teams to  easily scrape iGEM wiki pages using their own parameters.
 
-### Installation
+## Installation
 
 1. Download the files from the repository
 2. Create a virtual environment and run the following command from inside the virtual environment to install the required packages:  
