@@ -49,3 +49,6 @@ This step also includes the removal of default or unpopulated wiki pages, pages 
 ### Exporting
   
 Exporting is also done through the pipelines.py file. By default, the scraper will use the JsonLinesItemExporter provided by Scrapy. This will export the pages as a .jl file. If changing the export format is desired or if the existing functionality is simply not enough, one may use the Scrapy [Item Exporters](https://docs.scrapy.org/en/latest/topics/exporters.html) and the [Item Pipeline](https://docs.scrapy.org/en/latest/topics/item-pipeline.html) docs to customize the functionality of the exporter.
+  
+## License
+The code is provided under the MIT license.
